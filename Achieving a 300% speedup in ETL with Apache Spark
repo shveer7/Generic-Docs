@@ -1,0 +1,5 @@
+A common design pattern often emerges when teams begin to stitch together existing systems and an EDH cluster: file dumps, typically in a format like CSV, are regularly uploaded to EDH, where they are then unpacked, transformed into optimal query format, and tucked away in HDFS where various EDH components can use them. When these file dumps are large or happen very often, these simple steps can significantly slow down an ingest pipeline. Part of this delay is inevitable; moving large files across the network is time-consuming because of physical limitations and can't be readily sped up. However, the rest of the basic ingest workflow described above can often be improved.
+ 
+Here is an interesting simple Use case which improves the performance up to 300% in ETL with Apache Spark.
+ 
+https://blog.cloudera.com/blog/2016/12/achieving-a-300-speedup-in-etl-with-spark/​
