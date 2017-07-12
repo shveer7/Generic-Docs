@@ -1,0 +1,4 @@
+Teradata Database 14.10 and later releases support object names (such as database names, table names, column names, etc.) up to 128 characters in length but as per the AIB standards we have to follow 30 characters in length.
+ 
+Keep in mind that you must query the Data Dictionary "V" views in order to see the longer object names. For example, you must query DBC.TablesV, DBC.ColumnsV, etc.
+The older legacy compatibility views such as DBC.TablesV and DBC.ColumnsV are limited to the first 30 characters of the object names.​
