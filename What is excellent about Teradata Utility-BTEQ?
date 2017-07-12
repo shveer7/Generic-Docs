@@ -1,0 +1,151 @@
+BTEQ can be used to submit SQL in either a batch or interactive environment. Interactive users can submit SQL and receive an answer set on the screen. Users can also submit BTEQ jobs from batch scripts, have error checking and conditional logic, and allow for the work to be done in the background.
+BTEQ outputs a report format, where query man outputs data in a format more like a spreadsheet. This allows BTEQ a great deal of flexibility in formatting data, creating headings, and utilizing Teradata extensions, such as WITH and WITH BY that query man has problems in handling.
+BTEQ is often used to submit SQL, but is also an excellent tool for importing and exporting data.
+Importing Data: Data can be read from a file on either a mainframe or LAN attached computer and used for substitution directly into any Teradata SQL using the INSERT, UPDATE or DELETE statements.
+Exporting Data: Data can be written to either a mainframe or LAN attached computer using a SELECT from Teradata. You can also pick the format you desire ranging from data files to printed reports to Excel formats. There are other utilities that are faster than BTEQ for importing or exporting data.
+ 
+BTEQ commands begin with a period (.) and do not require a semi-colon (;) to end the statement. SQL commands do not ever start with a period and they must always be terminated with a semi-colon.
+Transactions in Teradata Mode:
+Often in Teradata we'll see multiple queries within the same transaction. We can use the BT / ET keywords to bundle several queries into one transaction. You also need to end every query with a semi-colon (;).
+When using BT / ET in your transaction, you're telling Teradata that when it comes to committing, we either want all or none. Make sure that your syntax is correct when using the method of BT and ET because a mistake causes a massive rollback.
+In Teradata mode if any query fails then all queries that are part of the same transaction roll back.
+Transactions in ANSI Mode:
+ANSI (American National Standard Institution) allows us to view the same queries in a different way. To change to ANSI mode, simple type '.set session transaction ANSI' and be sure to do it before you actually logon to BTEQ. Then, you can logon like you always do, but you will be in ANSI mode. All queries in ANSI mode will also work in Teradata mode and vice versa. However, three things will be different in ANSI mode versus Teradata mode. Those things are how case sensitivity is handled, how transactions are committed and rolled back, and how truncation is accepted.
+Remember the first rule of ANSI mode: all transactions must be committed by the user actually using the word 'COMMIT'.
+Rollback:
+The Rollback keyword is the SQL mulligan of Teradata. Rollback will erase any changes made to a table. This can be very useful if something didn't work. However, you cannot rollback once you've used the commit keyword.
+Advantages to ANSI Mode
+ANSI mode is great because when you bundle several queries into one transaction and one doesn't work, the rest won't be rolled back to their original state. Using commit will ensure that your successes aren't hidden by your failures.
+In ANSI mode, only failed transactions are rolled back when it comes to multi-statement transactions.
+Creating a Batch Script for BTEQ:
+Batch scripting allows us to write out pages and pages of queries and execute those queries in one single swoop. BTEQ can also run in batch mode under UNIX (IBM AIX, Hewlett-Packard HP-UX, NCR MP-RAS, and Sun Solaris), DOS, and Macintosh, Microsoft Windows and OS/2 operating systems. To submit a job in batch mode, do the following:
+Invoke BTEQ (using dos prompt)
+Type in the input file name
+Type in the location and output file name.
+Using BTEQ Conditional Logic:
+The initial steps of the script will establish the logon, the database, and then delete all the rows from the Employee Table. If the table does not exist, the BTEQ conditional logic will instruct Teradata to create it. However, if the table already exists, then Teradata will move forward and insert data.
+Using BTEQ to Export Data:
+Creating flat files is one of the most important tasks in Teradata, and that's a fact. BTEQ allows data to be exported directly from Teradata to a file on a mainframe or network-attached computer. In addition, the BTEQ export function has several export formats that a user can choose from depending on the desired output. Generally, users will export data to a flat file format that is composed of a variety of characteristics. These characteristics include: field mode, indicator mode, or dif mode.
+BTEQ Export Modes:
+Record Mode: (also called DATA mode): This is set by .EXPORT DATA. This will bring data back as a flat file. Each parcel will contain a complete record. Since it is not a report, there are no headers or white space between the data contained in each column and the data is written to the file (e.g., disk drive file) in native format. For example, this means that INTEGER data is written as a 4-byte binary field. Therefore, it cannot be read and understood using a normal text editor.
+Field Mode (also called REPORT mode): This is set by .EXPORT REPORT. This is the default mode for BTEQ and brings the data back as if it was a standard SQL SELECT statement. The output of this BTEQ export would return the column headers for the fields, white space, can be understood using a text editor.
+Indicator Mode: This is set by .EXPORT INDICDATA. This mode writes the data in data mode, but also provides host operating systems with the means of recognizing missing or unknown data (NULL) fields. This is important if the data is to be loaded into another Relational Database System (RDBMS).
+The issue is that there is no standard character defined to represent either a numeric or character NULL. So, every system uses a zero for a numeric NULL and a space or blank for a character NULL. If this data is simply loaded into another RDBMS, it is no longer a NULL, but a zero or space.
+To remedy this situation, INDICATA puts a bitmap at the front of every record written to the disk. This bitmap contains one bit per field/column. When a Teradata column contains a NULL, the bit for that field is turned on by setting it to a "1". Likewise, if the data is not NULL, the bit remains a zero. Therefore, the loading utility reads these bits as indicators of NULL data and identifies the column(s) as NULL when data is loaded back into the table, where appropriate.
+Since both DATA and INDICDATA store each column on disk in native format with known lengths and characteristics, they are the fastest method of transferring data. However, it becomes imperative that you be consistent. When it is exported as DATA, it must be imported as DATA and the same is true for INDICDATA.
+DIF Mode: Known as Data Interchange Format, which allows users to export data from Teradata to be directly utilized for spreadsheet applications like Excel, FoxPro and Lotus.
+The optional LIMIT is to tell BTEQ to stop returning rows after a specific number (n) of rows. This might be handy in a test environment to stop BTEQ before the end of transferring rows to the file
+BTEQ Return Codes
+Return codes are two-digit values that BTEQ returns to the user after completing each job or task. The value of the return code indicates the completion status of the job or task as follows:
+Return Code Description:
+00 Job completed with no errors.
+02 User alert to log on to the Teradata DBS.
+04 Warning error.
+08 User error.
+12 Severe internal error.
+
+ 
+BTEQ Commands
+The BTEQ commands in Teradata are designed for flexibility. These commands are not used directly on the data inside the tables.
+ BTEQ commands are utilized in four areas.
+Session Control Commands
+File Control Commands
+Sequence Control Commands
+Format Control Commands
+
+ 
+Commands for Sequence Control:
+Use the following commands to control the sequence in which BTEQ executes commands:
+ABORT
+ERRORLEVEL
+EXIT
+GOTO
+HANG
+IF... THEN...
+LABEL
+MAXERROR
+QUIT
+REMARK
+REPEAT
+=
+
+For the commands not listed below, refer to the tables above.
+COMMAND NAME	FUNCTION
+ERRORLEVEL	Assigns severity levels to errors.
+GOTO	Skips over all intervening BTEQ commands and SQL statements until a specified label is encountered, then resumes processing in sequence.
+HANG	Pauses BTEQ processing for a specified period of time.
+IF... THEN...	Tests the validity of the condition stated in the IF clause.
+LABEL	Identifies the point at which BTEQ resumes processing, as specified in a previous GOTO command.
+MAXERROR	Designates a maximum error severity level beyond which BTEQ terminates job processing.
+ 
+Format Control Commands:
+Use the following BTEQ commands to specify the way BTEQ presents information for screen oriented and printer/printer-file oriented output:
+DEFAULTS
+ECHOREQ
+EXPORT
+FOLDLINE
+FOOTING
+FORMAT
+HEADING
+IMPORT
+INDICDATA
+NULL
+OMIT
+PAGEBREAK
+PAGELENGTH
+QUIET
+RECORDMODE
+RETCANCEL
+RETLIMIT
+RETRY
+RTITLE
+SEPARATOR
+SHOW CONTROLS
+SIDETITLES
+SKIPDOUBLE
+SKIPLINE
+SUPPRESS
+TITLEDASHES
+UNDERLINE
+WIDTH 
+
+For the commands not listed below, refer to the tables above.
+COMMAND NAME	FUNCTION
+ECHOREQ	Enables the echo required function that returns a copy of each Teradata SQL request and BTEQ command to the standard output stream.
+FOLDLINE	Splits (fold) each line of a report into two or more lines.
+FOOTING	Specifies a footer to appear at the bottom of every page of a report.
+HEADING	Specifies a header to appear at the top of every page of a report.
+NULL	Specifies a character or character string to represent null field values returned from the Teradata Database.
+OMIT	Excludes specified columns returned from SQL SELECT statements.
+PAGEBREAK	Ejects a page whenever the value for one or more specified columns changes.
+PAGELENGTH	Specify the page length of printed reports, in lines per page.
+RETCANCEL	Cancel a request when the value specified by the RETLIMIT command ROWS option is exceeded.
+RETLIMIT	Specifies the maximum number of rows and/or columns displayed or written in response to a Teradata SQL request.
+RETRY	Resubmit requests that fail under certain error conditions.
+RTITLE	Specifies a header to appear at the top of every page of a report.
+SEPARATOR	Specifies a character string or width (in blank characters) to separate columns of a report.
+SIDETITLES	Position summary titles to the left of the summary lines in a report.
+SKIPDOUBLE	Insert two blank lines in a report whenever the value of a specified column changes.
+SKIPLINE	Inserts a blank line in a report whenever the value of a specified column changes.
+SUPPRESS	Replaces all consecutively repeated values with all-blank character strings.
+TITLEDASHES	Display a row of dash characters before each report line summarized by a WITH clause.
+UNDERLINE	Displays a row of dash characters whenever the value of a specified column changes.
+WIDTH	Specifies the width of screen displays and printed reports, in characters per line.
+ 
+BTEQ vs. SQL Assistant
+BTEQ is similar to Teradata SQL Assistant in submitting queries to the Teradata Database and generating reports. Yet, they are different in the following aspects:
+BTEQ connects to the database by means of CLIv2 (Call-Level Interface Version 2), whereas SQL Assistant does so by means of ODBC;
+BTEQ works on Unix and Windows as well, whereas SQL Assistant is designed for Windows only;
+BTEQ can run in batch mode for data-manipulating and reporting routines, whereas SQL Assistant cannot;
+BTEQ is a Teradata specific application, and cannot communicate with any other type of databases, whereas SQL Assistant can communicate with any ODBC-compliant databases;
+BTEQ supports conditional logic (i.e., "IF..THEN..."), whereas SQL Assistant does not;
+BTEQ's result sets can be more easily formatted to refined effects than SQL Assistant, because the latter applies its own formatting to the result sets.
+BTEQ's import / export functions are much more versatile, flexible and programmable than those of SQL Assistant;
+BTEQ is a command driven utility, whereas SQL Assistant is a GUI;
+BTEQ is more oriented to IT professionals like DBA's and programmers, whereas SQL Assistant is more oriented to business users and casual data consumers.
+BTEQ vs. Fast Export and MultiLoad
+BTEQ is similar to Teradata Fast Export and Teradata MultiLoad in exporting and importing. Yet, BTEQ is not a utility designed for bulk data movement.
+Firstly, Teradata export and load utilities are fully parallel. Therefore, in bulk exporting and loading scenarios, Teradata Fast Export and MultiLoad are better performers than BTEQ because they are optimized to apply multiple rows in block-level operations. BTEQ can import and export small volumes of data to and from the Teradata Database. In this aspect, indeed, it is more efficient than Teradata SQL Assistant. However, for tables that have more than a few thousand rows (It depends), Fast Export and MultiLoad are recommended for better efficiency. No wonder, "BTEQ on Unix/MVS (don't know about Windows) is typically faster than Fast Export until volumes get well into the millions, if not tens of millions, of rows."3
+Secondly, Fast Export and MultiLoad have full restart capability. This feature means that if a Fast Export or MultiLoad job should be interrupted for some reason, it can be restarted again from the last checkpoint, without having to start the job from the beginning. BTEQ does not support such features.
+Thirdly, MultiLoad can load multiple input files concurrently and work on up to five tables at a time, using multiple sessions. MultiLoad places a lock on the destination table(s) to prevent user queries from getting inconsistent results before the data load or update is complete.
+In conclusion, for complex bulk-mode routines, Fast Export and MultiLoad are preferred utilities; otherwise, BTEQ is a suitable choice.
