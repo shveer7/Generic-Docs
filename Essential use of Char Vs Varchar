@@ -1,0 +1,30 @@
+CHAR:
+ 
+Used to store character string value of fixed length.
+It's 50% faster than VARCHAR.
+Uses static memory allocation.
+ 
+VARCHAR:
+ 
+Used to store variable length alphanumeric data.
+VARCHAR uses one or two more bytes of storage (for length or termination) in addition to the actual data
+It's slower than CHAR.
+Uses dynamic memory allocation*
+ 
+Generally pick CHAR if all rows will have close to the same length. Pick VARCHAR when the length varies significantly. CHAR may also be a bit faster because all the rows are of the same length.
+It varies by DB implementation, but generally VARCHAR uses one or two more bytes of storage (for length or termination) in addition to the actual data. So (assuming you are using a one byte character set) storing the word "FooBar"
+CHAR(6) = 6 bytes (no overhead)
+VARCHAR(10) = 8 bytes (2 bytes of overhead)
+CHAR(10) = 10 bytes (4 bytes of overhead)
+
+ 
+
+Bottom line is CHAR can be faster and more space efficient for data of relatively the same length (within two characters length difference).
+
+ 
+
+Note: Microsoft SQL has 2 bytes of overhead for a VARCHAR. This may vary from DB to DB, but generally there is at least 1 byte of overhead needed to indicate length or EOL on a VARCHAR.
+
+ 
+
+If you are using a multi-byte, variable length character set like UTF8 then CHAR stores the maximum number of bytes necessary to store the number of characters. So if UTF8 needs at most 3 bytes to store a character, then CHAR(6) will be fixed at 18 bytes, even if only storing latin1 characters. So in this case VARCHAR becomes a much better choice.​
