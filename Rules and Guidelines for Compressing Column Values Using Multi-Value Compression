@@ -1,0 +1,45 @@
+The following rules and limitations apply to multi-value compression.
+•You cannot compress more than 255 distinct values for an individual column.
+•You cannot change the COMPRESS attribute for a column after it is defined.
+The workaround is to perform an INSERT … SELECT or MERGE into a new table defined with a revised set of compress values.
+•You cannot create a table with more bytes compressed than there is room to store them in the table header.
+•You cannot create a table if the expansion of its compression values exceeds the maximum size (8,192 characters) of the compressvaluelist column in theDBC.TVFields system table. Note that 255 CHARACTER(29) values are barely contained within the 8,192 limit.
+•You cannot compress values in columns that are any of the following.
+•Primary index columns
+•Identity columns
+•Volatile table columns
+•Derived table columns
+•Structured or internal UDT columns. This includes ARRAY, VARRAY, Period, and Geospatial UDT columns and any structured UDT that contains a BLOB or CLOB data type
+•Row‑level security constraint columns
+•Referenced primary key columns
+•Referencing foreign key columns for standard referential integrity relationships
+You can compress values in referencing foreign key columns for Batch and Referential Constraint referential integrity relationships.
+•You can use multi-value compression to compress distinct UDT columns that are defined using any of the following predefined data types.
+•Any numeric type
+•DATE
+•CHARACTER and GRAPHIC
+•VARCHAR and VARGRAPHIC
+•BYTE
+•VARBYTE
+•You can compress columns that are a component of a secondary index, but MultiLoad operations on a table with a secondary index can take longer if the secondary index column set is compressed.
+To avoid this problem, drop any compressed secondary indexes before starting the MultiLoad job and then recreate them afterward.
+•You can assign multi-value compression to columns that contain the following types of data.
+•Nulls, including nulls for distinct and structured non‑LOB UDTs, ARRAY/VARRAY and Period UDT data types
+•Zeros
+•Blanks
+•Constants having any of the following data types.
+•BYTE (up to 510 bytes)
+•BYTEINT
+•CHARACTER (up to 510 characters)
+•DATE (expressed as COMPRESS (DATE ’yyyy-mm-dd’))
+•DECIMAL/NUMERIC
+•DOUBLE PRECISION
+•FLOAT
+•GRAPHIC (up to 510 characters)
+•INTEGER
+•REAL
+•SMALLINT
+•VARCHAR
+•VARGRAPHIC
+•Both non‑temporal and temporal UDT columns
+•Distinct and structured UDT columns if the UDT does not contain BLOB or CLOB data.​
