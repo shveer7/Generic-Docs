@@ -1,0 +1,21 @@
+Teradata V2R6.0
+•Selected Partition Archive, Restore, and Copy
+•Dynamic partition elimination for merge join
+•Single-AMP NUSI access when NUSI on same columns as NUPI;
+•Partition elimination on RowIDs referenced by NUSI
+ Teradata V2R6.1
+•Row partitioning can be used for global temporary tables and volatile tables
+•Collect statistics on system-derived column PARTITION
+Teradata V2R6.2
+•Row partitioning can be implemented for non-compressed join indexes
+Teradata 12.0
+•Multi-level partitioning 
+Teradata 13.10
+•Tables and non-compressed join indexes can now include partitioning on a character column.
+•Row partitioned tables allow a test value (e.g., RANGE_N) to have a TIMESTAMP(n) data type.
+•ALTER TABLE tablename TO CURRENT …; 
+Teradata 14.0
+•Increased partition limit to 9.223 quintillion
+•New data types for RANGE_N – BIGINT and TIMESTAMP
+•ADD option for a partitioning level
+•Column partitioned tables can also be row partitioned
